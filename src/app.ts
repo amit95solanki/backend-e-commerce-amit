@@ -5,6 +5,7 @@ import productRoute from "./routes/products.js";
 import paymentRoute from "./routes/payment.js";
 import orderRoute from "./routes/order.js";
 import statRoute from "./routes/stats.js";
+import cartRoute from "./routes/cart.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import { singleUpload } from "./middlewares/multer.js";
 import NodeCache from "node-cache";
@@ -34,6 +35,7 @@ app.use("/api/v1/product", productRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/payment", paymentRoute);
 app.use("/api/v1/dashboard", statRoute);
+app.use("/api/v1/cart", cartRoute);
 app.use("/uploads", express.static("uploads"));
 app.use(errorMiddleware)
 
