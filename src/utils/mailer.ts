@@ -6,18 +6,22 @@ export const sendMail = async (email: any, subject: any, text: any) => {
 			host: process.env.SMTP_HOST,
 			service: process.env.SERVICE,
 			port: Number(process.env.SMTP_PORT),
-			secure: true,
+			secure: false,
 			auth: {
 				user: process.env.SMTP_MAIL,
 				pass: process.env.SMTP_PASSWORD,
 			},
+            tls: {
+                minVersion: 'TLSv1.2', // Specify the minimum SSL/TLS version
+                maxVersion: 'TLSv1.3', // Specify the maximum SSL/TLS version
+            }
 		});
 
 		await transporter.sendMail({
-			from: process.env.USER,
+			from: process.env.SMTP_MAIL,
 			to: email,
 			subject: subject,
-			html: text,
+			text: text,
 		});
 		console.log("email sent successfully");
 	} catch (error) {

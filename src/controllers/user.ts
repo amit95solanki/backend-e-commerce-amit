@@ -5,6 +5,8 @@ import { TryCatch } from "../middlewares/error.js";
 import ErrorHandler from "../utils/utility-class.js";
 import bcrypt  from  "bcrypt"
 import {sendMail} from "../utils/mailer.js"
+import randomstring from "randomstring"
+import { Resetpassword } from "../models/passwordReset.js";
 export const newUser = TryCatch(
     async(req:Request<{},{},NewUserRequestBody>,res:Response,next:NextFunction)=>{
 
@@ -31,8 +33,10 @@ export const newUser = TryCatch(
 
         const newUser = await User.create({name,email,photo,gender,dob:new Date(dob),password:hashPassword});
 
-        let msg ='<p> hii ' +' '+ name + ',please <a href= "http://localhost:3000/dashboard"> verify </a> your mail. </p>'
-        sendMail(email,"mail verification",msg)
+        // let msg ='<p> hii ' +' '+ name + ',please <a href= "http://localhost:3000/dashboard"> verify </a> your mail. </p>'
+
+        let msg =`Congratulations! ${name} You have successfully registered at Macho Man Shop. Welcome to the Macho Man community!`
+        sendMail(email,"Registration Successfull",msg)
 
         res.status(200).json({
             success : true,
@@ -74,5 +78,40 @@ export const getAllUsers = TryCatch(async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "User Deleted Successfully",
+    });
+  });
+
+  
+
+  export const forgetPassword = TryCatch(async (req, res, next) => {
+   const {email } =  req.body
+
+
+   let user = await User.findOne({email})
+   
+  //  console.log(email,"amit",user);
+
+
+   if(!user){
+       return res.status(400).json({
+           success : false,
+           message:`Email doesn't  exists`
+       })
+   }
+
+   const randomString :string =  randomstring.generate()
+   let msg =`Congratulations! ${user.name} You have successfully registered at Macho Man Shop. Welcome to the Macho Man community!`
+  
+   let passwordReset =new Resetpassword({
+    user_id:user._id,
+    token:randomString,
+   })
+
+   await passwordReset.save()
+   sendMail(user.email,"Reset password",msg)
+  
+    return res.status(200).json({
+      success: true,
+      message: "reset password send Successfully",
     });
   });
