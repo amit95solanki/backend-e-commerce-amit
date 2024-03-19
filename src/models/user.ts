@@ -2,25 +2,27 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 interface IUser extends Document {
-  _id: string;
+  // _id: string;
   name: string;
   email: string;
+  password?:string;
   photo: string;
   role: "admin" | "user";
   gender: "male" | "female";
   dob: Date;
   createdAt: Date;
   updatedAt: Date;
+  is_Verified ?: number;
   //   Virtual Attribute
   age: number;
 }
 
 const schema = new mongoose.Schema(
   {
-    _id: {
-      type: String,
-      required: [true, "Please enter ID"],
-    },
+    // _id: {
+    //   type: String,
+    //   required: [true, "Please enter ID"],
+    // },
     name: {
       type: String,
       required: [true, "Please enter Name"],
@@ -30,6 +32,10 @@ const schema = new mongoose.Schema(
       unique: [true, "Email already Exist"],
       required: [true, "Please enter Name"],
       validate: validator.default.isEmail,
+    },
+    password: {
+      type: String,
+      required: [true, "Please enter Password"],
     },
     photo: {
       type: String,
@@ -49,7 +55,14 @@ const schema = new mongoose.Schema(
       type: Date,
       required: [true, "Please enter Date of birth"],
     },
+    
+      is_Verified:{
+        type: Number,
+        default: 0, // 1 verified
+      }
+    
   },
+
   {
     timestamps: true,
   }

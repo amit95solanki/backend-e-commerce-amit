@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import { config } from "dotenv";
 import userRoute from "./routes/user.js";
 import productRoute from "./routes/products.js";
 import paymentRoute from "./routes/payment.js";
@@ -9,10 +10,17 @@ import cartRoute from "./routes/cart.js";
 import { errorMiddleware } from "./middlewares/error.js";
 import { singleUpload } from "./middlewares/multer.js";
 import NodeCache from "node-cache";
+
+config({
+  path: "./.env",
+}); 
+
 const app = express();
 app.use(express.json())
-const Port = 8000;
-const URI = "mongodb+srv://user:amitsolanki95@ecommerce.cit0fpc.mongodb.net/?retryWrites=true&w=majority";
+const Port =  process.env.PORT || 8000;
+
+const URI = process.env.DB_URL || 'mongodb://localhost:27017/mydatabase';
+
 export const myCache = new NodeCache();
 // Connect to the database
 async function main() {
