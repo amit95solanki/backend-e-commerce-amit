@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUser, forgetPassword, getAllUsers, getUser, newUser } from "../controllers/user.js";
+import { deleteUser, forgetPassword, getAllUsers, getUser, login, newUser } from "../controllers/user.js";
 import { adminOnly } from "../middlewares/auth.js";
 
 const app = express.Router();
@@ -8,6 +8,8 @@ const app = express.Router();
 // Route - /api/v1/user/new
 app.post("/new", newUser);
 
+
+app.post("/login", login);
 
 // Route - /api/v1/user/all
 app.get("/all", adminOnly ,getAllUsers);
